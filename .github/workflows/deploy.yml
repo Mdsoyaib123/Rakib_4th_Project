@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout Repository
         uses: actions/checkout@v4
 
       - name: Setup Node.js
@@ -20,17 +20,13 @@ jobs:
           node-version: "20"
           cache: "npm"
 
-      - name: Install dependencies
+      - name: Install Dependencies
         run: npm ci
 
-      - name: Build TypeScript
+      - name: Build Project
         run: npm run build
 
-      # Optional: add tests when you implement them
-      # - name: Run tests
-      #   run: npm test
-
-      - name: Deploy to EC2 via SSH + SCP
+      - name: Deploy to EC2
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.EC2_HOST }}
@@ -38,22 +34,27 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           port: 22
           script: |
-            echo "Starting deployment..."
+            echo "🚀 Starting deployment..."
 
-            cd ${{ secrets.EC2_APP_PATH }}
+            cd ${{ secrets.EC2_FRONTEND_PATH }}
 
-            git pull origin main  { echo "Git pull failed"; exit 1; }
+            echo "📥 Pulling latest code..."
+            git pull origin main
 
-            npm ci --production   # faster for production, skips dev deps
+            echo "📦 Installing dependencies..."
+            npm install --production
 
+            echo "🔨 Building project..."
             npm run build
 
-            pm2 restart ${{ secrets.PM2_APP_NAME }}  {
-              echo "PM2 restart failed - trying to start fresh"
-              pm2 start ./dist/server.js --name "${{ secrets.PM2_APP_NAME }}"
+            echo "♻️ Restarting PM2..."
+            pm2 restart ${{ secrets.PM2_APP_NAME }} || {
+              echo "⚡ PM2 process not found, starting new process..."
+              pm2 start dist/server.js --name "${{ secrets.PM2_APP_NAME }}"
               pm2 save
             }
 
-            pm2 logs --lines 20 ${{ secrets.PM2_APP_NAME }}   # show recent logs for debugging
+            echo "📊 PM2 Status:"
+            pm2 list
 
-            echo "Deployment finished."
+            echo "✅ Deployment completed!"
