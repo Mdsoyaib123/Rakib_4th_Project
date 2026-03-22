@@ -23,7 +23,7 @@ const login_user_from_db = async (
   }
   if (isExistAccount?.freezeUser === true && isExistAccount?.role !== "admin") {
     throw new AppError(
-      "Your account is currently Frozen. Please contact customer service",
+      "Your account is currently Frozen. Please contact Support Line",
       httpStatus.NOT_FOUND,
     );
   }

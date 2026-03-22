@@ -50,7 +50,7 @@ const createUser = async (payload: Partial<TUser>) => {
   payload.quantityOfOrders = 25; // Trial round orders
   payload.userDiopsitType = "trial";
   payload.userBalance = 0;
-  payload.trialRoundBalance = 10500;
+  payload.trialRoundBalance = 8500;
   payload.userSelectedPackage = 10500;
   payload.orderRound = {
     round: "trial",
@@ -756,7 +756,7 @@ const confirmedPurchaseOrder = async (userId: number, productId: number) => {
     if (user.quantityOfOrders <= 0)
       return {
         message:
-          "Insufficient order quantity . Please contact customer service",
+          "Insufficient order quantity . Please contact Support Line",
       };
 
     const currentOrderNumber = user.completedOrdersCount + 1;
@@ -789,7 +789,7 @@ const confirmedPurchaseOrder = async (userId: number, productId: number) => {
       return {
         success: false,
         message:
-          "Insufficient balance to purchase this product. Please contact customer service",
+          "Insufficient balance to purchase this product. Please contact Support Line",
       };
     }
 
