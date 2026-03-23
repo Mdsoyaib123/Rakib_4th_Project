@@ -8,6 +8,7 @@ export type TUser = {
   invitationCode: string;
   userId: number;
   userDiopsitType: "trial" | "deposit";
+  level : Number;
   freezeUser?: boolean;
   superiorUserId?: string;
   superiorUserName?: string;

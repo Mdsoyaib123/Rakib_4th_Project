@@ -430,6 +430,27 @@ const updateScore = async (req: Request, res: Response) => {
     });
   }
 };
+const updateLevel = async (req: Request, res: Response) => {
+  try {
+    const { userId } = req.params;
+
+    const result = await user_services.updateLevel(
+      userId as unknown as number,
+      req.body.level,
+    );
+
+    res.status(200).json({
+      success: true,
+      message: `level updated successfully`,
+      data: result,
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
 const udpateFreezeWithdraw = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
@@ -608,6 +629,7 @@ export const user_controllers = {
   getUserCompletedProducts,
   getUserUnCompletedProducts,
   updateScore,
+  updateLevel,
   udpateFreezeWithdraw,
   getUserWithdrawAddress,
   updateWithdrawPassword,

@@ -336,7 +336,7 @@ const updateAdminAssaignProduct = async (
 
     // 🔴 12x MUST have product
     if (mysteryboxMethod === "12x" && !productId) {
-      throw new Error("Product is required for 12x mysterybox");
+      throw new Error("Product is required for 13 mysterybox");
     }
 
     // 🔴 CASH must NOT have product
@@ -1016,6 +1016,14 @@ const updateScore = async (userId: number, payload: any) => {
     { new: true },
   );
 };
+const updateLevel = async (userId: number, payload: any) => {
+  console.log("userId and score ", userId, payload);
+  return await User_Model.findOneAndUpdate(
+    { userId: userId },
+    { level: payload },
+    { new: true },
+  );
+};
 const udpateFreezeWithdraw = async (userId: number, payload: boolean) => {
   console.log("payload", payload);
   try {
@@ -1303,6 +1311,7 @@ export const user_services = {
   getUserCompletedProducts,
   getUserUnCompletedProducts,
   updateScore,
+  updateLevel,
   udpateFreezeWithdraw,
   getUserWithdrawAddress,
   updateWithdrawPassword,

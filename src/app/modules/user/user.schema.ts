@@ -49,7 +49,7 @@ const userSchema = new Schema<TUser>(
         status: true,
       },
     },
-
+    level :{type : Number , default : 1},
     freezeUser: { type: Boolean, default: true },
 
     quantityOfOrders: { type: Number, default: 0 },

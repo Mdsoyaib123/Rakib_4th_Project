@@ -55,6 +55,7 @@ router.get(
   user_controllers.getUserUnCompletedProducts,
 );
 router.patch("/update-score/:userId", user_controllers.updateScore);
+router.patch("/update-level/:userId", user_controllers.updateLevel);
 router.patch(
   "/udpate-freeze-withdraw/:userId",
   user_controllers.udpateFreezeWithdraw,
