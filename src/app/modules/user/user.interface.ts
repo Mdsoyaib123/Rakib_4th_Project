@@ -8,7 +8,7 @@ export type TUser = {
   invitationCode: string;
   userId: number;
   userDiopsitType: "trial" | "deposit";
-  level : Number;
+  level: Number;
   freezeUser?: boolean;
   superiorUserId?: string;
   superiorUserName?: string;
@@ -58,6 +58,7 @@ export type TUser = {
       seenTheReward?: boolean;
     };
   }[];
+  cashback?: number[]
   mysteryReward?: Number;
   dailyCheckInReward: {
     lastCheckInDate: Date | null;

@@ -451,6 +451,47 @@ const updateLevel = async (req: Request, res: Response) => {
     });
   }
 };
+const addCashback = async (req: Request, res: Response) => {
+  try {
+    const { userId } = req.params;
+
+    const result = await user_services.addCashback(
+      userId as unknown as number,
+      req.body.cashbackAmount,
+    );
+
+    res.status(200).json({
+      success: true,
+      message: ` Added Cashback Amount successfully`,
+      data: result,
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+const resetCashback = async (req: Request, res: Response) => {
+  try {
+    const { userId } = req.params;
+
+    const result = await user_services.resetCashback(
+      userId as unknown as number,
+    );
+
+    res.status(200).json({
+      success: true,
+      message: ` reset Cashback  successfully`,
+      data: result,
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
 const udpateFreezeWithdraw = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
@@ -630,6 +671,8 @@ export const user_controllers = {
   getUserUnCompletedProducts,
   updateScore,
   updateLevel,
+  addCashback,
+  resetCashback,
   udpateFreezeWithdraw,
   getUserWithdrawAddress,
   updateWithdrawPassword,

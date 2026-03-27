@@ -56,6 +56,8 @@ router.get(
 );
 router.patch("/update-score/:userId", user_controllers.updateScore);
 router.patch("/update-level/:userId", user_controllers.updateLevel);
+router.patch("/add-cashback/:userId", user_controllers.addCashback);
+router.patch("/reset-cashback/:userId", user_controllers.resetCashback);
 router.patch(
   "/udpate-freeze-withdraw/:userId",
   user_controllers.udpateFreezeWithdraw,

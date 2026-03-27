@@ -49,7 +49,7 @@ const userSchema = new Schema<TUser>(
         status: true,
       },
     },
-    level :{type : Number , default : 1},
+    level: { type: Number, default: 1 },
     freezeUser: { type: Boolean, default: true },
 
     quantityOfOrders: { type: Number, default: 0 },
@@ -131,7 +131,7 @@ const userSchema = new Schema<TUser>(
     userType: { type: String, required: true, default: "Normal" },
     userOrderAmountSlot: {
       type: [Number],
-      default: [8500,20000,60000,100000,200000,300000,500000,700000,1000000],
+      default: [8500, 20000, 60000, 100000, 200000, 300000, 500000, 700000, 1000000],
     },
     userSelectedPackage: { type: Number },
 
@@ -162,7 +162,10 @@ const userSchema = new Schema<TUser>(
       ],
       default: [],
     },
-
+    cashback: {
+      type: [Number],
+      required: false
+    },
     mysteryReward: {
       type: Number,
       default: 0,
