@@ -80,4 +80,8 @@ router.patch(
   user_controllers.updatePasswordFromAdmin,
 );
 
+router.post("/spin/:userId", user_controllers.spinWheelService);
+router.get("/spin/status/:userId", user_controllers.getWheelStatusService);
+
+
 export const userRoute = router;

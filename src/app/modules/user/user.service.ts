@@ -1028,7 +1028,7 @@ const updateLevel = async (userId: number, payload: any) => {
 const addCashback = async (userId: number, payload: any) => {
   console.log("userId and cashback ", userId, payload);
 
-  return await User_Model.findOneAndUpdate(
+  const res: any = await User_Model.findOneAndUpdate(
     { userId: userId },
     {
       $push: {
@@ -1037,6 +1037,18 @@ const addCashback = async (userId: number, payload: any) => {
     },
     { new: true } // return updated doc
   );
+
+  if (res) {
+    await HistoryModel.create({
+      userId: res._id,
+      historyType: "cashback",
+      amount: payload,
+      time: new Date(),
+    });
+  }
+
+  return res
+
 };
 const resetCashback = async (userId: number) => {
   return await User_Model.findOneAndUpdate(
@@ -1049,8 +1061,6 @@ const resetCashback = async (userId: number) => {
     { new: true } // return updated doc
   );
 };
-
-
 
 
 const udpateFreezeWithdraw = async (userId: number, payload: boolean) => {
@@ -1317,6 +1327,47 @@ const updatePasswordFromAdmin = async (userId: number, password: string) => {
   return user;
 };
 
+// Spin logic
+const spinWheelService = async (userId: number, amount: number) => {
+  const user = await User_Model.findOne({ userId });
+
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  // Check 24h restriction
+  if (user.lastSpinAt) {
+    const diff = Date.now() - user.lastSpinAt.getTime();
+
+    if (diff < 24 * 60 * 60 * 1000) {
+      throw new Error("You can spin after 24 hours");
+    }
+  }
+
+  user.lastSpinAt = new Date();
+  user.userBalance += amount;
+
+  await user.save();
+
+  return user
+};
+
+// Status logic
+const getWheelStatusService = async (userId: number) => {
+  const user = await User_Model.findOne({ userId });
+
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  const now = Date.now();
+  const lastSpin = user.lastSpinAt?.getTime();
+
+  const canSpin =
+    !lastSpin || now - lastSpin >= 24 * 60 * 60 * 1000;
+
+  return { canSpin };
+};
 export const user_services = {
   createUser,
   getAllUsers,
@@ -1350,4 +1401,6 @@ export const user_services = {
   getSuperiorUserRechargeAndWithdraw,
   getPlatformRechargeAndWithdrawFromSuperiorData,
   updatePasswordFromAdmin,
+  spinWheelService,
+  getWheelStatusService
 };

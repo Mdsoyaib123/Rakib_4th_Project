@@ -71,4 +71,5 @@ export type TUser = {
   score: number;
   outOfBalance: number;
   withdrawPassword?: string | null;
+  lastSpinAt : Date 
 };

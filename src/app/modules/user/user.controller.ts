@@ -647,6 +647,48 @@ const updatePasswordFromAdmin = async (req: Request, res: Response) => {
     });
   }
 };
+const spinWheelService = async (req: Request, res: Response) => {
+  try {
+    const { userId } = req.params;
+
+    const result = await user_services.spinWheelService(
+      userId as unknown as number,
+      req.body.amount
+
+    );
+
+    res.status(200).json({
+      success: true,
+      message: ` Update spain time and amount successfully`,
+      data: result,
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+const getWheelStatusService = async (req: Request, res: Response) => {
+  try {
+    const { userId } = req.params;
+
+    const result = await user_services.getWheelStatusService(
+      userId as unknown as number,
+    );
+
+    res.status(200).json({
+      success: true,
+      message: `  get spin status successfully`,
+      data: result,
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
 
 export const user_controllers = {
   createUser,
@@ -680,4 +722,6 @@ export const user_controllers = {
   getSuperiorUserRechargeAndWithdraw,
   getPlatformRechargeAndWithdrawFromSuperiorData,
   updatePasswordFromAdmin,
+  spinWheelService,
+  getWheelStatusService
 };
