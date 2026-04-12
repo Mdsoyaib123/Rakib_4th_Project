@@ -19,6 +19,8 @@ const allowedOrigins = [
   "https://mercadolivrebd.online",
   "https://www.mercadolivrebd.online",
   "https://admin.mercadolivrebd.online",
+  "https://mercado-livre-dashboard.netlify.app",
+  "https://deluxe-mousse-ec6b48.netlify.app"
 ];
 
 app.use(
