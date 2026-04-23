@@ -71,8 +71,6 @@ const getAllProducts = async (req: Request, res: Response) => {
     limit,
     name,
     productId,
-    minPrice,
-    maxPrice
   );
 
   res.status(200).json({

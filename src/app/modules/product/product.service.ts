@@ -15,27 +15,12 @@ const generateUnique4DigitProductId = async (): Promise<number> => {
 const createProduct = async (payload: TProduct) => {
   // console.log("product pyload", payload);
   payload.productId = await generateUnique4DigitProductId();
-  payload.salePrice = Number(payload.price) + Number(payload.commission);
-
   const product = await ProductModel.create(payload);
   return product;
 };
 
 const updateProduct = async (productId: number, payload: Partial<TProduct>) => {
-  // Recalculate salePrice if price or commission changes
-  if (payload.price !== undefined || payload.commission !== undefined) {
-    const existingProduct = await ProductModel.findOne({
-      productId: productId,
-    });
 
-    if (!existingProduct) {
-      throw new Error("Product not found");
-    }
-
-    payload.salePrice =
-      Number(payload.price ?? existingProduct.price) +
-      Number(payload.commission ?? existingProduct.commission);
-  }
 
   const updatedProduct = await ProductModel.findOneAndUpdate(
     { productId: productId },
@@ -54,8 +39,6 @@ const getAllProducts = async (
   limit = 10,
   name?: string,
   productId?: string,
-  minPrice?: number,
-  maxPrice?: number,
 ) => {
   const query: any = {};
 
@@ -69,24 +52,7 @@ const getAllProducts = async (
     query.productId = Number(productId);
   }
 
-  // ✅ Price range filter (safe)
-  if (
-    (typeof minPrice === "number" && !isNaN(minPrice)) ||
-    (typeof maxPrice === "number" && !isNaN(maxPrice))
-  ) {
-    query.price = {};
-
-    if (typeof minPrice === "number" && !isNaN(minPrice)) {
-      query.price.$gte = minPrice;
-    }
-
-    if (typeof maxPrice === "number" && !isNaN(maxPrice)) {
-      query.price.$lte = maxPrice;
-    }
-  }
-
   const data = await ProductModel.find(query)
-    .sort({ price: 1 })
     .skip((page - 1) * limit)
     .limit(limit)
     .exec();
