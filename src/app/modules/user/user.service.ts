@@ -257,7 +257,7 @@ const updatePasswordFromAdmin = async (userId: number, password: string) => {
 
 
 
-const assignProducts = async (userId: number, products: any[]) => {
+const assignProducts = async (userId: number, products: any[], type: 'trial' | 'normal' | 'group') => {
   const session = await mongoose.startSession();
 
   try {
@@ -275,6 +275,7 @@ const assignProducts = async (userId: number, products: any[]) => {
         {
           userId: user._id,
           products,
+          type
         },
       ],
       { session }
@@ -313,7 +314,74 @@ const assignProducts = async (userId: number, products: any[]) => {
 };
 const buyProduct = async (userId: number, selectedProductsIds: string, productId: string) => {
 
-  
+  console.log(userId, selectedProductsIds, productId)
+
+
+  const user = await User_Model.findOne({ _id: userId });
+
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  const selectedProducts = await SelectedProducts.findOne({ _id: selectedProductsIds });
+  if (!selectedProducts) {
+    throw new Error("Selected products not found");
+  }
+
+  console.log(selectedProducts)
+
+  const buyProduct = selectedProducts.products.find((product: any) => productId.toString() === productId);
+
+  if (!buyProduct) {
+    throw new Error("Buy product not found");
+  }
+  console.log('buy product ', buyProduct)
+
+  if (user?.userBalance < buyProduct.price) {
+    throw new Error("Insufficient balance");
+  }
+
+  if (selectedProducts.type === 'trial') {
+
+  }
+
+
+  const newBalance = user.userBalance - buyProduct.price;
+  const newCommission = user.withdrawAbleBalance + buyProduct.commission;
+  const updatedUser = await User_Model.findOneAndUpdate(
+    { _id: userId },
+    {
+      $inc: {
+        userBalance: newBalance,
+        withdrawAbleBalance: newCommission,
+      },
+    },
+    { new: true }
+  );
+
+  if (updatedUser) {
+    // Update selected product status
+    await SelectedProducts.updateOne(
+      {
+        _id: selectedProductsIds,
+        "products.productId": productId,
+      },
+      {
+        $set: {
+          "products.$.status": "completed",
+        },
+      }
+    );
+
+
+  }
+
+
+
+
+
+
+
 
 
 
@@ -339,5 +407,5 @@ export const user_services = {
   decreaseUserBalance,
   updateWithdrawalAddress,
   updatePasswordFromAdmin,
-  assignProducts
+  assignProducts, buyProduct
 };

@@ -9,5 +9,6 @@ export interface TProductItem {
 
 export interface TSelectedProducts {
     userId: Types.ObjectId;
+    type: 'trial' | 'normal' | 'group'
     products: TProductItem[];
 }

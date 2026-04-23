@@ -29,7 +29,7 @@ export type TUser = {
   withdrawAbleBalance: number;
 
   assainProductsIds: Types.ObjectId;
-shareableLink : string;
+  shareableLink: string;
 
 
   memberTotalRecharge?: number;

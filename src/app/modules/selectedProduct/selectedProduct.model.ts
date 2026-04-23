@@ -32,6 +32,11 @@ const selectedProductsSchema = new Schema<TSelectedProducts>(
       ref: "User",
       required: true,
     },
+    type: {
+      type: String,
+      enum: ["trial", "normal", "group"],
+      required: true,
+    },
     products: {
       type: [selectedProductItemSchema],
       required: true,
@@ -47,3 +52,9 @@ export const SelectedProducts = model<TSelectedProducts>(
   "SelectedProducts",
   selectedProductsSchema
 );
+
+
+
+
+
+

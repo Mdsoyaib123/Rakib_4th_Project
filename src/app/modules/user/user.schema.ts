@@ -87,12 +87,17 @@ const userSchema = new Schema<TUser>(
 
     userBalance: { type: Number, required: true, default: 0 },
     withdrawAbleBalance: { type: Number, required: true, default: 0 },
+
     assainProductsIds: {
       type: Schema.Types.ObjectId,
       ref: "SelectedProducts",
       default: null
     },
     shareableLink: { type: String, default: null },
+
+
+
+    
     memberTotalRecharge: { type: Number, default: 0 },
     memberTotalWithdrawal: { type: Number, default: 0 },
 

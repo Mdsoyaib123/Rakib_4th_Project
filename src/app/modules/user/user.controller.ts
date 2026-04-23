@@ -191,20 +191,48 @@ const updatePasswordFromAdmin = async (req: Request, res: Response) => {
 
 const assignProducts = async (req: Request, res: Response) => {
   try {
-    const { userId, products } = req.body;
+    const { userId, products,type } = req.body;
 
-    if(!products){
+    if (!products) {
       throw new Error('Required a product')
     }
 
     const result = await user_services.assignProducts(
       userId,
-      products
+      products,
+      type
     );
 
     res.status(201).json({
       success: true,
       message: "Products assigned successfully",
+      data: result,
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: error.message || "Something went wrong",
+    });
+  }
+};
+
+const buyProduct = async (req: Request, res: Response) => {
+  try {
+    const { userId, selectedProductsIds, productId } = req.body;
+
+    if (!productId) {
+      throw new Error('Required a product')
+    }
+
+    const result = await user_services.buyProduct(
+      userId,
+      selectedProductsIds,
+      productId
+    );
+
+    res.status(201).json({
+      success: true,
+      message: "Product bought successfully",
       data: result,
     });
   } catch (error: any) {
@@ -227,5 +255,6 @@ export const user_controllers = {
   updateWithdrawalAddress,
 
   updatePasswordFromAdmin,
-  assignProducts
+  assignProducts,
+  buyProduct
 };

@@ -32,5 +32,7 @@ router.patch(
 
 router.post("/assignProducts", user_controllers.assignProducts);
 
+router.post("/buyProduct", user_controllers.buyProduct);
+
 
 export const userRoute = router;
