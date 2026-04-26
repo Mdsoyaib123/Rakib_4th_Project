@@ -21,18 +21,7 @@ const login_user_from_db = async (
   if (!isExistAccount) {
     throw new AppError("Account is   Not Found", httpStatus.NOT_FOUND);
   }
-  if (isExistAccount?.freezeUser === true && isExistAccount?.role !== "admin") {
-    throw new AppError(
-      "Your account is currently Frozen. Please contact Support Line",
-      httpStatus.NOT_FOUND,
-    );
-  }
-  console.log("ip address 444", ipAddress);
-
-  await User_Model.findOneAndUpdate(
-    { phoneNumber: payload.phoneNumber },
-    { lastLoginIp: ipAddress, lastLoginTime: new Date() },
-  );
+ 
 
   const isPasswordMatch = await bcrypt.compare(
     payload.password,

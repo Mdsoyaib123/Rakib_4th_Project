@@ -27,27 +27,8 @@ const createWithdrawService = async (payload: CreateWithdrawPayload) => {
   }
 
   if (!user) throw new Error("User not found");
-  if (user.freezeUser) throw new Error("User account is frozen");
-  if (user?.freezeWithdraw)
-    throw new Error("Your withdrawal is frozen , please contact admin support");
 
-  if (user?.orderRound?.round === "trial" && user?.quantityOfOrders !== 0) {
-    throw new Error("You can't withdraw before complete trial orders");
-  }
 
-  if (
-    user?.orderRound?.round === "round_one" &&
-    user?.userDiopsitType === "trial"
-  ) {
-    throw new Error("You can't withdraw before complete two round orders");
-  }
-  if (user?.orderRound?.round === "round_one") {
-    throw new Error("You can't withdraw before complete two round orders");
-  }
-
-  if (user?.orderRound?.round === "round_two" && user?.quantityOfOrders !== 0) {
-    throw new Error("You can't withdraw before complete all orders");
-  }
 
   const withdrawal = user.withdrawalAddressAndMethod;
 
@@ -87,7 +68,6 @@ const createWithdrawService = async (payload: CreateWithdrawPayload) => {
     userId: user.userId,
     amount,
     name: user.name || "N/A",
-    superiorUserName: user.superiorUserName || "",
 
     withdrawMethod: withdrawalMethod.withdrawMethod,
 
