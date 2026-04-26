@@ -34,6 +34,11 @@ router.post("/assignProducts", user_controllers.assignProducts);
 
 router.post("/buyProduct", user_controllers.buyProduct);
 
+router.patch(
+  "/update-multiple-product-prices",
+  user_controllers.updateMultipleProductPrices
+);
+
 router.patch('/updateIsgroupOrderAccepted/:selectedProductsIds', user_controllers.updateIsgroupOrderAccepted)
 
 export const userRoute = router;

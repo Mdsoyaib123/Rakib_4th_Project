@@ -243,6 +243,30 @@ const buyProduct = async (req: Request, res: Response) => {
   }
 };
 
+
+const updateMultipleProductPrices = async (req: Request, res: Response) => {
+  try {
+    const { selectedProductsId, updatesProductPrices } = req.body;
+
+    const result =
+      await user_services.updateMultipleProductPrices(
+        selectedProductsId,
+        updatesProductPrices
+      );
+
+    res.status(200).json({
+      success: true,
+      message: "Products prices updated successfully",
+      data: result,
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
 const updateIsgroupOrderAccepted = async (req: Request, res: Response) => {
 
 
@@ -286,5 +310,6 @@ export const user_controllers = {
   updatePasswordFromAdmin,
   assignProducts,
   buyProduct,
-  updateIsgroupOrderAccepted
+  updateIsgroupOrderAccepted,
+  updateMultipleProductPrices
 };

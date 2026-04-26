@@ -9,35 +9,49 @@ import { Withdraw_Model } from "../withdrow/withdrow.model";
 import { SelectedProducts } from "../selectedProduct/selectedProduct.model";
 
 const createUser = async (payload: Partial<TUser>) => {
-
-
-  const ieExists = await User_Model.findOne({
-    $or: [{ email: payload.email }, { phoneNumber: payload.phoneNumber }],
+  const exists = await User_Model.findOne({
+    $or: [
+      { email: payload.email },
+      { phoneNumber: payload.phoneNumber },
+    ],
   });
 
-  if (ieExists) {
-    if (ieExists.email === payload.email) {
-      throw new Error("Email already exists. Please use a different email.");
+  if (exists) {
+    if (exists.email === payload.email) {
+      throw new Error("Email already exists.");
     }
 
-    if (ieExists.phoneNumber === payload.phoneNumber) {
-      throw new Error(
-        "Phone number already exists. Please use a different phone number.",
-      );
+    if (exists.phoneNumber === payload.phoneNumber) {
+      throw new Error("Phone number already exists.");
     }
   }
-  if (payload?.password) {
-    const hashedPassword = await bcrypt.hash(payload.password, 10);
-    payload.password = hashedPassword;
+
+  if (!payload.password) {
+    throw new Error("Password is required");
   }
 
-  payload.userBalance = 6;
+  const hashedPassword = await bcrypt.hash(payload.password, 10);
 
-  const res = await User_Model.create(payload);
-  console.log('res', res)
-  return res
+  const userData = {
+    ...payload,
+    password: hashedPassword,
+    userBalance: 6,
+    invitationCode: await generateUniqueInvitationCode(),
+  };
+
+  try {
+    console.log('userData', userData)
+    const user = await User_Model.create(userData);
+
+    console.log('user', user)
+    return user;
+  } catch (error: any) {
+    console.log("CREATE USER ERROR:", error);
+    console.log("MESSAGE:", error.message);
+    console.log("ERRORS:", error.errors);
+    throw error;
+  }
 };
-
 const getAllUsers = async (query: any) => {
   const {
     page = 1,
@@ -113,60 +127,46 @@ const deleteUser = async (id: number) => {
 
 const rechargeUserBalance = async (userId: number, amount: number) => {
   const session = await mongoose.startSession();
-  session.startTransaction();
 
   try {
-    const user: any = await User_Model.findOne({ userId }).session(session);
-    if (!user) throw new Error("User not found");
+    session.startTransaction();
 
-    let newOutOfBalance = user?.outOfBalance || 0;
+    const user = await User_Model.findOne({ userId }).session(session);
 
-    if (amount >= newOutOfBalance) {
-      newOutOfBalance = 0;
-    } else {
-      newOutOfBalance = amount - newOutOfBalance;
+    if (!user) {
+      throw new Error("User not found");
     }
 
-    const res = await User_Model.findOneAndUpdate(
+    const updatedUser = await User_Model.findOneAndUpdate(
       { userId },
       {
-        $set: {
-          userDiopsitType:
-            user.orderRound.round === "trial" &&
-              user?.orderRound.status === false
-              ? "diopsit"
-              : user.userDiopsitType,
-          "orderRound.round": user.orderRound.round,
-          "orderRound.status": false, //
-          outOfBalance: newOutOfBalance,
-        },
         $inc: {
           userBalance: amount,
-          memberTotalRecharge: amount,
         },
       },
-      { new: true, session },
+      {
+        new: true,
+        session,
+      }
     );
 
-    // ✅ Record history
-    if (res) {
-      await HistoryModel.create(
-        [
-          {
-            userId: user._id, // keep ObjectId
-            historyType: "recharge",
-            amount,
-            time: new Date(),
-          },
-        ],
-        { session },
-      );
-    }
+    // Save history
+    await HistoryModel.create(
+      [
+        {
+          userId: user._id,
+          historyType: "recharge",
+          amount,
+          time: new Date(),
+        },
+      ],
+      { session }
+    );
 
     await session.commitTransaction();
     session.endSession();
 
-    return res;
+    return updatedUser;
   } catch (error) {
     await session.abortTransaction();
     session.endSession();
@@ -343,7 +343,7 @@ const buyProduct = async (userId: number, selectedProductsIds: string, productId
 
 
   const newBalance = user.userBalance - buyProduct.price;
-  const newCommission = user.withdrawAbleBalance + buyProduct.commission;
+  const newCommission =  (buyProduct.price * buyProduct.commission) / 100;
   const updatedUser = await User_Model.findOneAndUpdate(
     { _id: userId },
     {
@@ -374,6 +374,35 @@ const buyProduct = async (userId: number, selectedProductsIds: string, productId
 
 };
 
+
+const updateMultipleProductPrices = async (
+  selectedProductsId: string,
+  updates: { productItemId: string; price: number; commission?: number }[]
+) => {
+  console.log('  selectedProductsId ', selectedProductsId)
+  console.log(' updates ', updates)
+  const bulkOperations = updates.map((item) => ({
+    updateOne: {
+      filter: {
+        _id: selectedProductsId,
+        "products.productId": item.productItemId,
+      },
+      update: {
+        $set: {
+          "products.$.price": item.price,
+          ...(item.commission !== undefined && {
+            "products.$.commission": item.commission,
+          }),
+        },
+      },
+    },
+  }));
+
+  const result = await SelectedProducts.bulkWrite(bulkOperations);
+  console.log('updated', result)
+
+  return result;
+};
 
 const updateIsgroupOrderAccepted = async (selectedProductsIds: string) => {
   const selectedProducts = await SelectedProducts.findOne({ _id: selectedProductsIds });
@@ -408,5 +437,6 @@ export const user_services = {
   updateWithdrawalAddress,
   updatePasswordFromAdmin,
   assignProducts, buyProduct,
-  updateIsgroupOrderAccepted
+  updateIsgroupOrderAccepted,
+  updateMultipleProductPrices
 };
