@@ -37,6 +37,10 @@ const selectedProductsSchema = new Schema<TSelectedProducts>(
       enum: ["trial", "normal", "group"],
       required: true,
     },
+    isgroupOrderAccepted: {
+      type: Boolean,
+      default: false
+    },
     products: {
       type: [selectedProductItemSchema],
       required: true,

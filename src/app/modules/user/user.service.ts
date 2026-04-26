@@ -31,7 +31,7 @@ const createUser = async (payload: Partial<TUser>) => {
     payload.password = hashedPassword;
   }
 
-  payload.userBalance = 0;
+  payload.userBalance = 6;
 
   const res = await User_Model.create(payload);
   console.log('res', res)
@@ -341,10 +341,6 @@ const buyProduct = async (userId: number, selectedProductsIds: string, productId
     throw new Error("Insufficient balance");
   }
 
-  if (selectedProducts.type === 'trial') {
-
-  }
-
 
   const newBalance = user.userBalance - buyProduct.price;
   const newCommission = user.withdrawAbleBalance + buyProduct.commission;
@@ -376,19 +372,23 @@ const buyProduct = async (userId: number, selectedProductsIds: string, productId
 
   }
 
-
-
-
-
-
-
-
-
-
 };
 
 
-
+const updateIsgroupOrderAccepted = async (selectedProductsIds: string) => {
+  const selectedProducts = await SelectedProducts.findOne({ _id: selectedProductsIds });
+  if (!selectedProducts) {
+    throw new Error("Selected products not found");
+  }
+  const updatedSelectedProducts = await SelectedProducts.findOneAndUpdate(
+    { _id: selectedProductsIds },
+    {
+      isgroupOrderAccepted: true,
+    },
+    { new: true }
+  );
+  return updatedSelectedProducts;
+}
 
 
 
@@ -407,5 +407,6 @@ export const user_services = {
   decreaseUserBalance,
   updateWithdrawalAddress,
   updatePasswordFromAdmin,
-  assignProducts, buyProduct
+  assignProducts, buyProduct,
+  updateIsgroupOrderAccepted
 };

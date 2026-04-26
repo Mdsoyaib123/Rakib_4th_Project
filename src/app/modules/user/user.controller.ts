@@ -191,7 +191,7 @@ const updatePasswordFromAdmin = async (req: Request, res: Response) => {
 
 const assignProducts = async (req: Request, res: Response) => {
   try {
-    const { userId, products,type } = req.body;
+    const { userId, products, type } = req.body;
 
     if (!products) {
       throw new Error('Required a product')
@@ -243,6 +243,35 @@ const buyProduct = async (req: Request, res: Response) => {
   }
 };
 
+const updateIsgroupOrderAccepted = async (req: Request, res: Response) => {
+
+
+  try {
+    const { selectedProductsIds } = req.params;
+
+    const result = await user_services.updateIsgroupOrderAccepted(
+      selectedProductsIds
+    );
+
+    res.status(201).json({
+      success: true,
+      message: "Group order accepted successfully",
+      data: result,
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: error.message || "Something went wrong",
+    });
+  }
+}
+
+
+
+
+
+
+
 export const user_controllers = {
   createUser,
   getAllUsers,
@@ -256,5 +285,6 @@ export const user_controllers = {
 
   updatePasswordFromAdmin,
   assignProducts,
-  buyProduct
+  buyProduct,
+  updateIsgroupOrderAccepted
 };
