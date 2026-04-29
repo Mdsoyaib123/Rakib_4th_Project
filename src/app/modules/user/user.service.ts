@@ -11,20 +11,15 @@ import { SelectedProducts } from "../selectedProduct/selectedProduct.model";
 const createUser = async (payload: Partial<TUser>) => {
   const exists = await User_Model.findOne({
     $or: [
-      { email: payload.email },
       { phoneNumber: payload.phoneNumber },
     ],
   });
 
   if (exists) {
-    if (exists.email === payload.email) {
-      throw new Error("Email already exists.");
-    }
-
     if (exists.phoneNumber === payload.phoneNumber) {
       throw new Error("Phone number already exists.");
     }
-  }
+  } 
 
   if (!payload.password) {
     throw new Error("Password is required");
