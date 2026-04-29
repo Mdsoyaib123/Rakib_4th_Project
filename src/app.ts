@@ -15,12 +15,8 @@ const app = express();
 const allowedOrigins = [
   "http://localhost:5173",
   "http://localhost:5174",
-  "https://deluxe-mousse-ec6b48.netlify.app",
-  "https://mercadolivrebdonline.cc",
-  "https://www.mercadolivrebdonline.cc",
-  "https://admin.mercadolivrebdonline.cc",
-  "https://mercado-livre-dashboard.netlify.app",
-  "https://deluxe-mousse-ec6b48.netlify.app"
+ "https://zonivaa.netlify.app",
+ "https://zoniva-dashboard.netlify.app"
 ];
 
 app.use(
