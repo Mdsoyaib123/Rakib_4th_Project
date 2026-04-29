@@ -117,7 +117,7 @@ const getUserByUserId = async (userId: number) => {
     populate: {
       path: "products.productId",
       model: "Product",
-      select: "_id productId status poster  name  introduction"  
+      select: "_id productId status poster  name  introduction"
     },
   });
 };
