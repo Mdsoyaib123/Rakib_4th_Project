@@ -335,14 +335,14 @@ const buyProduct = async (userId: number, selectedProductsIds: string, productId
     throw new Error("Selected products not found");
   }
 
-  console.log(selectedProducts)
+  console.log('selected products',selectedProducts)
 
-  const buyProduct = selectedProducts.products.find((product: any) => product?.productId.toString() === productId);
+  const buyProduct = selectedProducts.products.find((product: any) => productId.toString() === productId);
 
   if (!buyProduct) {
     throw new Error("Buy product not found");
   }
-  console.log('buy product ', buyProduct)
+  console.log('buy product ----------------------- ', buyProduct)
 
   if (user?.userBalance < buyProduct.price) {
     throw new Error("Insufficient balance");
