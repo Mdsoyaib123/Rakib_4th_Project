@@ -433,7 +433,13 @@ const updateIsgroupOrderAccepted = async (selectedProductsIds: string) => {
   return updatedSelectedProducts;
 }
 
-
+const freezeUser = async (id: number, isFreeze: boolean) => {
+  return await User_Model.findOneAndUpdate(
+    { userId: id },
+    { freezeUser: isFreeze },
+    { new: true },
+  );
+};
 
 
 
@@ -452,5 +458,6 @@ export const user_services = {
   updatePasswordFromAdmin,
   assignProducts, buyProduct,
   updateIsgroupOrderAccepted,
-  updateMultipleProductPrices
+  updateMultipleProductPrices,
+  freezeUser
 };

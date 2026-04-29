@@ -40,5 +40,6 @@ router.patch(
 );
 
 router.patch('/updateIsgroupOrderAccepted/:selectedProductsIds', user_controllers.updateIsgroupOrderAccepted)
+router.put("/freeze/:userId", user_controllers.freezeUser);
 
 export const userRoute = router;

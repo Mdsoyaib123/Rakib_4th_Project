@@ -291,7 +291,20 @@ const updateIsgroupOrderAccepted = async (req: Request, res: Response) => {
 }
 
 
-
+const freezeUser = async (req: Request, res: Response) => {
+  try {
+    await user_services.freezeUser(
+      req.params.userId as unknown as number,
+      req.body.isFreeze,
+    );
+    res.json({
+      success: true,
+      message: "User freeze status updated successfully",
+    });
+  } catch (error: any) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+};
 
 
 
@@ -311,5 +324,6 @@ export const user_controllers = {
   assignProducts,
   buyProduct,
   updateIsgroupOrderAccepted,
-  updateMultipleProductPrices
+  updateMultipleProductPrices,
+  freezeUser
 };

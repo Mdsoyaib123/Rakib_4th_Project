@@ -21,7 +21,11 @@ const login_user_from_db = async (
   if (!isExistAccount) {
     throw new AppError("Account is   Not Found", httpStatus.NOT_FOUND);
   }
- 
+
+  if (isExistAccount.freezeUser) {
+    throw new AppError("Your account is freeze", httpStatus.UNAUTHORIZED);
+  }
+
 
   const isPasswordMatch = await bcrypt.compare(
     payload.password,

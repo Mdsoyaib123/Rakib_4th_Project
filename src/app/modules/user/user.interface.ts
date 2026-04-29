@@ -10,6 +10,8 @@ export type TUser = {
   invitationCode: string;
   userId: number;
 
+  freezeUser?: boolean;
+
   withdrawalAddressAndMethod?: {
     name: string;
     withdrawMethod: "MobileBanking" | "BankTransfer";

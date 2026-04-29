@@ -18,7 +18,8 @@ const userSchema = new Schema<TUser>(
       required: true,
       unique: true,
     },
-
+ freezeUser: { type: Boolean, default: true },
+ 
     userId: {
       type: Number,
       unique: true,
