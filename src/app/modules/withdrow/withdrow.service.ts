@@ -7,11 +7,10 @@ import bcrypt from "bcrypt";
 type CreateWithdrawPayload = {
   userId: number;
   amount: number;
-  withdrawPassword: string;
 };
 
 const createWithdrawService = async (payload: CreateWithdrawPayload) => {
-  const { userId, amount, withdrawPassword } = payload;
+  const { userId, amount } = payload;
 
   const user = await User_Model.findOne({ userId });
 
