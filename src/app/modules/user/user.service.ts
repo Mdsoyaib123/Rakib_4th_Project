@@ -337,7 +337,7 @@ const buyProduct = async (userId: number, selectedProductsIds: string, productId
 
   console.log(selectedProducts)
 
-  const buyProduct = selectedProducts.products.find((product: any) => productId.toString() === productId);
+  const buyProduct = selectedProducts.products.find((product: any) => product?.productId.toString() === productId);
 
   if (!buyProduct) {
     throw new Error("Buy product not found");
