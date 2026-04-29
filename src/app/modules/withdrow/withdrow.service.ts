@@ -163,9 +163,8 @@ const rejectWithdrawService = async (
     { userId: withdraw.userId },
     {
       $inc: {
-        userBalance: withdraw.withdrawalAmount,
+        withdrawAbleBalance: withdraw.withdrawalAmount,
         memberTotalWithdrawal: -withdraw.withdrawalAmount,
-        amountFrozedInWithdrawal: -withdraw.withdrawalAmount,
       },
     },
   );
