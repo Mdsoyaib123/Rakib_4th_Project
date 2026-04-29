@@ -319,67 +319,73 @@ const assignProducts = async (userId: number, products: any[], type: 'trial' | '
     throw error;
   }
 };
-const buyProduct = async (userId: number, selectedProductsIds: string, productId: string) => {
-
-  console.log(userId, selectedProductsIds, productId)
-
-
-  const user = await User_Model.findOne({ _id: userId });
+const buyProduct = async (
+  userId: string,
+  selectedProductsIds: string,
+  productId: string
+) => {
+  const user = await User_Model.findById(userId);
 
   if (!user) {
     throw new Error("User not found");
   }
 
-  const selectedProducts = await SelectedProducts.findOne({ _id: selectedProductsIds });
+  const selectedProducts = await SelectedProducts.findById(selectedProductsIds);
+
   if (!selectedProducts) {
     throw new Error("Selected products not found");
   }
 
-  console.log('selected products',selectedProducts)
-
-  const buyProduct = selectedProducts.products.find((product: any) => productId.toString() === productId);
+  // Find product inside products array
+  const buyProduct = selectedProducts.products.find(
+    (product: any) => product.productId.toString() === productId
+  );
 
   if (!buyProduct) {
-    throw new Error("Buy product not found");
+    throw new Error("Product not found");
   }
-  console.log('buy product ----------------------- ', buyProduct)
 
-  if (user?.userBalance < buyProduct.price) {
+  // Check already completed
+  if (buyProduct.status === "completed") {
+    throw new Error("Product already purchased");
+  }
+
+  // Check balance
+  if (user.userBalance < buyProduct.price) {
     throw new Error("Insufficient balance");
   }
 
-  
+  // price + commission
+  const totalAmount =
+    buyProduct.price +
+    (buyProduct.price * buyProduct.commission) / 100;
 
-  const newBalance = user.userBalance - buyProduct.price;
-  const newCommissionAndBalace = buyProduct.price + (buyProduct.price * buyProduct.commission) / 100;
-  const updatedUser = await User_Model.findOneAndUpdate(
-    { _id: userId },
+  // Update user balance
+  const updatedUser = await User_Model.findByIdAndUpdate(
+    userId,
     {
       $inc: {
-        userBalance: newBalance,
-        withdrawAbleBalance: newCommissionAndBalace,
+        userBalance: -buyProduct.price, // deduct
+        withdrawAbleBalance: totalAmount, // add
       },
     },
     { new: true }
   );
 
-  if (updatedUser) {
-    // Update selected product status
-    await SelectedProducts.updateOne(
-      {
-        _id: selectedProductsIds,
-        "products.productId": productId,
+  // Update product status
+  await SelectedProducts.updateOne(
+    {
+      _id: selectedProductsIds,
+      "products.productId": productId,
+    },
+    {
+      $set: {
+        "products.$.status": "completed",
       },
-      {
-        $set: {
-          "products.$.status": "completed",
-        },
-      }
-    );
+    }
+  );
 
-
-  }
-
+  return updatedUser;
 };
 
 
