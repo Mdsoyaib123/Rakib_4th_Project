@@ -348,15 +348,16 @@ const buyProduct = async (userId: number, selectedProductsIds: string, productId
     throw new Error("Insufficient balance");
   }
 
+  
 
   const newBalance = user.userBalance - buyProduct.price;
-  const newCommission = (buyProduct.price * buyProduct.commission) / 100;
+  const newCommissionAndBalace = buyProduct.price + (buyProduct.price * buyProduct.commission) / 100;
   const updatedUser = await User_Model.findOneAndUpdate(
     { _id: userId },
     {
       $inc: {
         userBalance: newBalance,
-        withdrawAbleBalance: newCommission,
+        withdrawAbleBalance: newCommissionAndBalace,
       },
     },
     { new: true }
