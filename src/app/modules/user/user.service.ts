@@ -290,7 +290,7 @@ const assignProducts = async (userId: number, products: any[], type: 'trial' | '
 
     const selectedProductId = createSelectProducts[0]._id;
 
-    const frontendUrl = process.env.FRONTEND_URL || "https://zonivaa.netlify.app";
+    const frontendUrl = process.env.FRONTEND_URL || "https://amazoncore.netlify.app";
 
     const shareableLink = `${frontendUrl}/selected-products/${selectedProductId}`;
 
