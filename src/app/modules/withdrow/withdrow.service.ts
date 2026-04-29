@@ -92,9 +92,8 @@ const createWithdrawService = async (payload: CreateWithdrawPayload) => {
     { userId },
     {
       $inc: {
-        userBalance: -amount,
+        withdrawAbleBalance: -amount,
         memberTotalWithdrawal: +amount,
-        amountFrozedInWithdrawal: +amount,
       },
     },
   );
