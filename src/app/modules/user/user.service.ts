@@ -112,7 +112,14 @@ const getAllUsers = async (query: any) => {
 };
 const getUserByUserId = async (userId: number) => {
   console.log("userid ", userId);
-  return await User_Model.findOne({ userId: userId }).populate('assainProductsIds');
+  return await User_Model.findOne({ userId: userId }).populate({
+    path: "assainProductsIds",
+    populate: {
+      path: "products.productId",
+      model: "Product",
+      select: "_id productId status poster  name  introduction"  
+    },
+  });
 };
 
 const updateUser = async (id: string, payload: Partial<TUser>) => {
@@ -343,7 +350,7 @@ const buyProduct = async (userId: number, selectedProductsIds: string, productId
 
 
   const newBalance = user.userBalance - buyProduct.price;
-  const newCommission =  (buyProduct.price * buyProduct.commission) / 100;
+  const newCommission = (buyProduct.price * buyProduct.commission) / 100;
   const updatedUser = await User_Model.findOneAndUpdate(
     { _id: userId },
     {
