@@ -15,16 +15,6 @@ const createWithdrawService = async (payload: CreateWithdrawPayload) => {
 
   const user = await User_Model.findOne({ userId });
 
-  if (!user?.withdrawPassword) {
-    throw new Error("Please add withdrawal password first");
-  }
-
-  // 🔐 compare hashed password
-  const isMatch = await bcrypt.compare(withdrawPassword, user.withdrawPassword);
-
-  if (!isMatch) {
-    throw new Error("Incorrect withdrawal password");
-  }
 
   if (!user) throw new Error("User not found");
 
