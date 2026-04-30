@@ -15,13 +15,6 @@ const createUser = async (req: Request, res: Response) => {
 
     // 🔹 MongoDB duplicate key error
     if (error.code === 11000) {
-      if (error.keyPattern?.email) {
-        return res.status(409).json({
-          success: false,
-          message: "Email already exists",
-        });
-      }
-
       if (error.keyPattern?.phoneNumber) {
         return res.status(409).json({
           success: false,
