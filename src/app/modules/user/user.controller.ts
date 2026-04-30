@@ -299,6 +299,19 @@ const freezeUser = async (req: Request, res: Response) => {
   }
 };
 
+const resetAssignProductsIds = async (req: Request, res: Response) => {
+  try {
+    await user_services.resetAssignProductsIds(
+      req.params.userId as unknown as number,
+    );
+    res.json({
+      success: true,
+      message: "User assign products ids reset successfully",
+    });
+  } catch (error: any) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+};
 
 
 
@@ -318,5 +331,6 @@ export const user_controllers = {
   buyProduct,
   updateIsgroupOrderAccepted,
   updateMultipleProductPrices,
-  freezeUser
+  freezeUser,
+  resetAssignProductsIds
 };

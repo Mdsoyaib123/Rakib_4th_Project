@@ -19,7 +19,7 @@ const createUser = async (payload: Partial<TUser>) => {
     if (exists.phoneNumber === payload.phoneNumber) {
       throw new Error("Phone number already exists.");
     }
-  } 
+  }
 
   if (!payload.password) {
     throw new Error("Password is required");
@@ -435,6 +435,14 @@ const freezeUser = async (id: number, isFreeze: boolean) => {
     { new: true },
   );
 };
+const resetAssignProductsIds = async (userId: number) => {
+  return await User_Model.findOneAndUpdate(
+    { userId },
+    { assainProductsIds: null, shareableLink: null },
+    { new: true },
+  );
+};
+
 
 
 
@@ -454,5 +462,6 @@ export const user_services = {
   assignProducts, buyProduct,
   updateIsgroupOrderAccepted,
   updateMultipleProductPrices,
-  freezeUser
+  freezeUser,
+  resetAssignProductsIds
 };
