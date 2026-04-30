@@ -13,16 +13,6 @@ const createUser = async (req: Request, res: Response) => {
   } catch (error: any) {
     // console.error("❌ Create User Error:", error);
 
-    // 🔹 MongoDB duplicate key error
-    if (error.code === 11000) {
-      if (error.keyPattern?.phoneNumber) {
-        return res.status(409).json({
-          success: false,
-          message: "Phone number already exists",
-        });
-      }
-    }
-
     // 🔹 Custom business logic errors
     if (
       error.message?.includes("exists") ||

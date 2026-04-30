@@ -3,7 +3,6 @@ import { Types } from "mongoose";
 export type TUser = {
   name?: string;
   phoneNumber: string;
-  email: string;
   role: "user" | "admin";
   password: string;
   confirmPassword: string;

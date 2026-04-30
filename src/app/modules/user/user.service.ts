@@ -9,10 +9,12 @@ import { Withdraw_Model } from "../withdrow/withdrow.model";
 import { SelectedProducts } from "../selectedProduct/selectedProduct.model";
 
 const createUser = async (payload: Partial<TUser>) => {
+
+  console.log('payload----------------', payload)
   const exists = await User_Model.findOne({
-    $or: [
-      { phoneNumber: payload.phoneNumber },
-    ],
+
+    phoneNumber: payload.phoneNumber
+
   });
 
   if (exists) {
