@@ -354,8 +354,7 @@ const buyProduct = async (
 
   // price + commission
   const totalAmount =
-    buyProduct.price +
-    (buyProduct.price * buyProduct.commission) / 100;
+    buyProduct.price +buyProduct.commission
 
   // Update user balance
   const updatedUser = await User_Model.findByIdAndUpdate(

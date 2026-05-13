@@ -52,7 +52,7 @@ const createWithdrawService = async (payload: CreateWithdrawPayload) => {
   if (!withdrawalMethod) {
     throw new Error("Withdrawal address not set");
   }
-
+  
   const withdrawPayload: Partial<TWithdraw> = {
     userId: user.userId,
     amount,
