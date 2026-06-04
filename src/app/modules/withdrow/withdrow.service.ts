@@ -14,6 +14,10 @@ const createWithdrawService = async (payload: CreateWithdrawPayload) => {
 
   const user = await User_Model.findOne({ userId });
 
+  if(user?.assainProductsIds !== null){
+    throw new Error("You have some pending product. Please complete that order first to make a withdraw request.");
+  }
+
 
   if (!user) throw new Error("User not found");
 

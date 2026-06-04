@@ -351,15 +351,14 @@ const buyProduct = async (
   }
 
   // price + commission
-  const totalAmount =
-    buyProduct.price +buyProduct.commission
+  const totalAmount =buyProduct.commission
 
   // Update user balance
   const updatedUser = await User_Model.findByIdAndUpdate(
     userId,
     {
       $inc: {
-        userBalance: -buyProduct.price, // deduct
+        // userBalance: -buyProduct.price, // deduct
         withdrawAbleBalance: totalAmount, // add
       },
     },
