@@ -1,11 +1,9 @@
 import mongoose from "mongoose";
 import { generateUniqueInvitationCode } from "../../utils/genarateInvitationCode";
-import { ProductModel } from "../product/product.model";
 import { TUser } from "./user.interface";
 import { User_Model } from "./user.schema";
 import bcrypt from "bcrypt";
 import { HistoryModel } from "../history/history.model";
-import { Withdraw_Model } from "../withdrow/withdrow.model";
 import { SelectedProducts } from "../selectedProduct/selectedProduct.model";
 
 const createUser = async (payload: Partial<TUser>) => {

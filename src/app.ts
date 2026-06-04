@@ -15,8 +15,8 @@ const app = express();
 const allowedOrigins = [
   "http://localhost:5173",
   "http://localhost:5174",
- "https://zonivaa.netlify.app",
- "https://zoniva-dashboard.netlify.app",
+ "https://juwelo.netlify.app",
+ "https://adminjuwelo.netlify.app",
  "https://amazoncore.netlify.app",
  "https://amazoncore-dashboard.netlify.app"
 ];
