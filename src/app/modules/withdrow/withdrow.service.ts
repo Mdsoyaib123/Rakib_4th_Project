@@ -3,6 +3,7 @@ import { User_Model } from "../user/user.schema";
 import { Withdraw_Model } from "./withdrow.model";
 import { TWithdraw } from "./withdrow.interface";
 import bcrypt from "bcrypt";
+import { SelectedProducts } from "../selectedProduct/selectedProduct.model";
 
 type CreateWithdrawPayload = {
   userId: number;
@@ -12,14 +13,21 @@ type CreateWithdrawPayload = {
 const createWithdrawService = async (payload: CreateWithdrawPayload) => {
   const { userId, amount } = payload;
 
-  const user = await User_Model.findOne({ userId });
-
-  if(user?.assainProductsIds !== null){
-    throw new Error("You have some pending product. Please complete that order first to make a withdraw request.");
-  }
-
+  const user = await User_Model.findOne({ userId }).populate("assainProductsIds");
 
   if (!user) throw new Error("User not found");
+
+  const selectedProducts = await SelectedProducts.findOne({ userId: user._id });
+
+
+  if(selectedProducts?.type === "group" && selectedProducts.isgroupOrderAccepted) {
+    throw new Error("You have a pending group order. Please complete that order first to make a withdraw request.");
+
+  }
+
+  if (user?.assainProductsIds !== null) {
+    throw new Error("You have some pending product. Please complete that order first to make a withdraw request.");
+  }
 
 
 

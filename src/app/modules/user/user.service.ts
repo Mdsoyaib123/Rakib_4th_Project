@@ -314,6 +314,7 @@ const assignProducts = async (userId: number, products: any[], type: 'trial' | '
     throw error;
   }
 };
+
 const buyProduct = async (
   userId: string,
   selectedProductsIds: string,
