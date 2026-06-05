@@ -17,13 +17,13 @@ const createWithdrawService = async (payload: CreateWithdrawPayload) => {
 
   if (!user) throw new Error("User not found");
 
-  const selectedProducts = await SelectedProducts.findOne({ userId: user._id });
+  // const selectedProducts = await SelectedProducts.findOne({ userId: user._id });
 
 
-  if(selectedProducts?.type === "group" && selectedProducts.isgroupOrderAccepted) {
-    throw new Error("You have a pending group order. Please complete that order first to make a withdraw request.");
+  // if(selectedProducts?.type === "group" && selectedProducts.isgroupOrderAccepted) {
+  //   throw new Error("You have a pending group order. Please complete that order first to make a withdraw request.");
 
-  }
+  // }
 
   if (user?.assainProductsIds !== null) {
     throw new Error("You have some pending product. Please complete that order first to make a withdraw request.");
