@@ -111,6 +111,7 @@ const userSchema = new Schema<TUser>(
 
     outOfBalance: { type: Number, default: 0 },
     withdrawPassword: { type: String, default: null },
+    score: { type: Number, default: 0 },
 
   },
   { timestamps: true },

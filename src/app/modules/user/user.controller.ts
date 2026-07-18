@@ -303,6 +303,28 @@ const resetAssignProductsIds = async (req: Request, res: Response) => {
   }
 };
 
+const updateScore = async (req: Request, res: Response) => {
+  try {
+    const { userId } = req.params;
+    const { score } = req.body;
+
+    const result = await user_services.updateScore(
+      Number(userId) as unknown as number,
+      score as number,
+    );
+
+    res.status(200).json({
+      success: true,
+      message: `score updated successfully`,
+      data: result,
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
 
 
 export const user_controllers = {
@@ -322,5 +344,6 @@ export const user_controllers = {
   updateIsgroupOrderAccepted,
   updateMultipleProductPrices,
   freezeUser,
-  resetAssignProductsIds
+  resetAssignProductsIds,
+  updateScore
 };

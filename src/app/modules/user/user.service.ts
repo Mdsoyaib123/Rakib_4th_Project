@@ -30,7 +30,7 @@ const createUser = async (payload: Partial<TUser>) => {
   const userData = {
     ...payload,
     password: hashedPassword,
-    userBalance: 6,
+    userBalance: 4,
     invitationCode: await generateUniqueInvitationCode(),
   };
 
@@ -443,6 +443,13 @@ const resetAssignProductsIds = async (userId: number) => {
 };
 
 
+const updateScore = async (userId: number, score: number) => {
+  return await User_Model.findOneAndUpdate(
+    { userId },
+    { score: score },
+    { new: true },
+  );
+}
 
 
 
@@ -462,5 +469,6 @@ export const user_services = {
   updateIsgroupOrderAccepted,
   updateMultipleProductPrices,
   freezeUser,
-  resetAssignProductsIds
+  resetAssignProductsIds,
+  updateScore
 };

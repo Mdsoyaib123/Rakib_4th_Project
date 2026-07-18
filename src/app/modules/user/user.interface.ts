@@ -42,5 +42,5 @@ export type TUser = {
 
   outOfBalance: number;
   withdrawPassword?: string | null;
-
+  score : number;
 };
