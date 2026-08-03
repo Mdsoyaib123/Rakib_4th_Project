@@ -55,8 +55,8 @@ const createWithdrawService = async (payload: CreateWithdrawPayload) => {
 
   if (user.withdrawAbleBalance < amount) throw new Error("Insufficient balance");
 
-  if (amount < 6) {
-    throw new Error("Minimum withdrawal amount is $6");
+  if (amount < 4) {
+    throw new Error("Minimum withdrawal amount is $4");
   }
 
   const withdrawalMethod = user.withdrawalAddressAndMethod;
