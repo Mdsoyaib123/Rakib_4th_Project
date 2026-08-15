@@ -18,7 +18,11 @@ const allowedOrigins = [
  "https://zonivaa.netlify.app",
  "https://zoniva-dashboard.netlify.app",
  "https://amazoncore.netlify.app",
- "https://amazoncore-dashboard.netlify.app"
+ "https://amazoncore-dashboard.netlify.app",
+ "https://coreonline-34e4c.web.app",
+ "https://core-admin-134f0.web.app"
+
+
 ];
 
 app.use(
