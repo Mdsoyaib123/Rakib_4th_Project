@@ -259,7 +259,7 @@ const updatePasswordFromAdmin = async (userId: number, password: string) => {
 
 
 
-const assignProducts = async (userId: number, products: any[], type: 'trial' | 'normal' | 'group') => {
+const assignProducts = async (userId: number, products: any[], type: 'trial' | 'normal' | 'group' | 'special') => {
   const session = await mongoose.startSession();
 
   try {
@@ -346,8 +346,12 @@ const buyProduct = async (
     throw new Error("Product already purchased");
   }
 
-  // Check balance
+  // Check balance. A special order is priced above what the member can afford
+  // on purpose, so it gets its own wording instead of "Insufficient balance".
   if (user.userBalance < buyProduct.price) {
+    if (selectedProducts.type === "special") {
+      throw new Error("You have received a special order");
+    }
     throw new Error("Insufficient balance");
   }
 
