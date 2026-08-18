@@ -34,7 +34,7 @@ const selectedProductsSchema = new Schema<TSelectedProducts>(
     },
     type: {
       type: String,
-      enum: ["trial", "normal", "group"],
+      enum: ["trial", "normal", "group", "special"],
       required: true,
     },
     isgroupOrderAccepted: {
