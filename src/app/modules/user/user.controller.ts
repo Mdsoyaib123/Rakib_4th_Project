@@ -327,6 +327,53 @@ const updateScore = async (req: Request, res: Response) => {
 };
 
 
+const updateFreezeWithdraw = async (req: Request, res: Response) => {
+  try {
+    const { userId } = req.params;
+    const { freezeWithdraw } = req.body;
+
+    const result = await user_services.updateFreezeWithdraw(
+      Number(userId),
+      freezeWithdraw as boolean,
+    );
+
+    res.status(200).json({
+      success: true,
+      message: `withdrawal ${freezeWithdraw ? "frozen" : "unfrozen"} successfully`,
+      data: result,
+    });
+  } catch (error: any) {
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+const updateVipLevel = async (req: Request, res: Response) => {
+  try {
+    const { userId } = req.params;
+    const { vipLevel } = req.body;
+
+    const result = await user_services.updateVipLevel(
+      Number(userId),
+      vipLevel as number,
+    );
+
+    res.status(200).json({
+      success: true,
+      message: `vip level updated successfully`,
+      data: result,
+    });
+  } catch (error: any) {
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+
 export const user_controllers = {
   createUser,
   getAllUsers,
@@ -345,5 +392,7 @@ export const user_controllers = {
   updateMultipleProductPrices,
   freezeUser,
   resetAssignProductsIds,
-  updateScore
+  updateScore,
+  updateFreezeWithdraw,
+  updateVipLevel
 };

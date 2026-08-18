@@ -18,7 +18,10 @@ const userSchema = new Schema<TUser>(
       unique: true,
     },
  freezeUser: { type: Boolean, default: true },
- 
+ freezeWithdraw: { type: Boolean, default: false },
+
+    vipLevel: { type: Number, default: 3, min: 1 },
+
     userId: {
       type: Number,
       unique: true,

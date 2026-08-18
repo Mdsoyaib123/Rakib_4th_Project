@@ -451,6 +451,44 @@ const updateScore = async (userId: number, score: number) => {
   );
 }
 
+const updateFreezeWithdraw = async (userId: number, freezeWithdraw: boolean) => {
+  if (typeof freezeWithdraw !== "boolean") {
+    throw new Error("freezeWithdraw must be a boolean value");
+  }
+
+  const user = await User_Model.findOneAndUpdate(
+    { userId },
+    { freezeWithdraw },
+    { new: true },
+  );
+
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  return user;
+};
+
+const updateVipLevel = async (userId: number, vipLevel: number) => {
+  const level = Number(vipLevel);
+
+  if (!Number.isFinite(level) || !Number.isInteger(level) || level < 1) {
+    throw new Error("vipLevel must be a positive whole number");
+  }
+
+  const user = await User_Model.findOneAndUpdate(
+    { userId },
+    { vipLevel: level },
+    { new: true },
+  );
+
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  return user;
+};
+
 
 
 
@@ -470,5 +508,7 @@ export const user_services = {
   updateMultipleProductPrices,
   freezeUser,
   resetAssignProductsIds,
-  updateScore
+  updateScore,
+  updateFreezeWithdraw,
+  updateVipLevel
 };

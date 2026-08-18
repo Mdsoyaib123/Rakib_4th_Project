@@ -10,6 +10,9 @@ export type TUser = {
   userId: number;
 
   freezeUser?: boolean;
+  freezeWithdraw?: boolean;
+
+  vipLevel?: number;
 
   withdrawalAddressAndMethod?: {
     name: string;

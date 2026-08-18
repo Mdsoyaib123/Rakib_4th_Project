@@ -17,6 +17,12 @@ const createWithdrawService = async (payload: CreateWithdrawPayload) => {
 
   if (!user) throw new Error("User not found");
 
+  if (user.freezeWithdraw) {
+    throw new Error(
+      "Withdrawals are currently prohibited for your account. Please contact customer support.",
+    );
+  }
+
   // const selectedProducts = await SelectedProducts.findOne({ userId: user._id });
 
 

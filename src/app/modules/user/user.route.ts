@@ -44,4 +44,11 @@ router.put("/freeze/:userId", user_controllers.freezeUser);
 router.put("/reset-assign-products-ids/:userId", user_controllers.resetAssignProductsIds);
 router.put("/update-score/:userId", user_controllers.updateScore);
 
+router.patch(
+  "/update-freeze-withdraw/:userId",
+  user_controllers.updateFreezeWithdraw,
+);
+
+router.patch("/update-vip-level/:userId", user_controllers.updateVipLevel);
+
 export const userRoute = router;
